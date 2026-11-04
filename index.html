@@ -1,12 +1,28 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的个人网站</title>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lynn 的个人学习档案，记录、整理与持续探索。">
+  <title>Zone2022 — 学习档案</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+  <script defer src="assets/app.js"></script>
 </head>
 <body>
-    <h1>你好，Lynn！</h1>
-    <p>欢迎来到我的第一个个人网站。这里是使用 GitHub Pages 搭建的。</p>
-</body>
-</html>
+  <a class="skip" href="#archive">跳到文档目录</a>
+  <header class="topbar"><a class="brand" href="#top">ZONE<span>2022</span><i>.</i></a><nav aria-label="主导航"><a href="#archive">学习档案</a><a href="#about">关于这里</a><a href="https://github.com/Zone2022/Zone2022.github.io" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav></header>
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title"><div class="hero-top"><span>PERSONAL KNOWLEDGE ARCHIVE</span><span>学习 · 记录 · 连接</span></div><h1 id="hero-title"><span>LEARN</span><span class="outline">IN PUBLIC.</span></h1><div class="hero-bottom"><p>你好，我是 Lynn。<br>这里收藏学习路上的想法、笔记与发现。</p><a class="round-link" href="#archive" aria-label="浏览学习档案">探索档案 <span>↘</span></a></div><div class="hero-index">ZONE2022 / AN OPEN NOTEBOOK</div></section>
+    <section class="archive" id="archive"><div class="section-heading"><div><p class="section-label">THE ARCHIVE / 学习档案</p><h2>积累，<br>然后连接<span>.</span></h2></div><p>每一篇笔记，都是下一次思考的起点。<br>从目录中找到感兴趣的内容。</p></div>
+      <div class="archive-tools"><label class="search"><span aria-hidden="true">⌕</span><span class="sr-only">搜索文档</span><input id="search" type="search" placeholder="搜索文档或分类" autocomplete="off"><kbd>/</kbd></label><label class="filter-label"><span class="sr-only">选择分类</span><select id="category"><option value="">全部分类</option></select></label><span id="count" class="count" aria-live="polite">正在载入档案…</span></div>
+      <div class="list-head" aria-hidden="true"><span>DOCUMENT / 文档</span><span>CATEGORY / 分类</span><span>OPEN</span></div><div id="notes" class="notes" aria-live="polite"><p class="state">正在整理文档…</p></div>
+    </section>
+    <section class="about" id="about"><p class="section-label">A NOTE FROM LYNN</p><div><h2>保持好奇，<br>持续生长。</h2><p>这个空间用来整理学习过程中的笔记。将零散的知识放在一起，让新的想法有迹可循。</p><a href="https://github.com/Zone2022" target="_blank" rel="noopener noreferrer">更多关于我 ↗</a></div></section>
+  </main><footer><div><span>AN OPEN NOTEBOOK</span><a href="#top">回到顶部 ↑</a></div><strong>ZONE2022.</strong><p>Made for the curious. <span>© Zone2022</span></p></footer>
+  <dialog id="reader" aria-labelledby="reader-title"><div class="reader-shell"><header class="reader-bar"><a class="brand" href="#top">ZONE<span>2022</span><i>.</i></a><button id="close-reader" type="button" aria-label="关闭阅读器">关闭 <span>×</span></button></header><div class="reader-progress"><span></span></div><div class="reader-layout"><aside><p class="section-label">READING NOW</p><h2 id="reader-title"></h2><p id="reader-category"></p><div id="toc"></div></aside><article id="content" class="markdown"></article></div></div></dialog>
+</body></html>
+
+
