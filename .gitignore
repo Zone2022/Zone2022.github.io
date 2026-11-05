@@ -1,0 +1,6 @@
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.taste-skill/
+.preview/
+node_modules/

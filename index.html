@@ -1,28 +1,220 @@
 <!doctype html>
 <html lang="zh-CN">
-<head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Lynn 的个人学习档案，记录、整理与持续探索。">
-  <title>Zone2022 — 学习档案</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/style.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
-  <script defer src="assets/app.js"></script>
-</head>
-<body>
-  <a class="skip" href="#archive">跳到文档目录</a>
-  <header class="topbar"><a class="brand" href="#top">ZONE<span>2022</span><i>.</i></a><nav aria-label="主导航"><a href="#archive">学习档案</a><a href="#about">关于这里</a><a href="https://github.com/Zone2022/Zone2022.github.io" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav></header>
-  <main id="top">
-    <section class="hero" aria-labelledby="hero-title"><div class="hero-top"><span>PERSONAL KNOWLEDGE ARCHIVE</span><span>学习 · 记录 · 连接</span></div><h1 id="hero-title"><span>LEARN</span><span class="outline">IN PUBLIC.</span></h1><div class="hero-bottom"><p>你好，我是 Lynn。<br>这里收藏学习路上的想法、笔记与发现。</p><a class="round-link" href="#archive" aria-label="浏览学习档案">探索档案 <span>↘</span></a></div><div class="hero-index">ZONE2022 / AN OPEN NOTEBOOK</div></section>
-    <section class="archive" id="archive"><div class="section-heading"><div><p class="section-label">THE ARCHIVE / 学习档案</p><h2>积累，<br>然后连接<span>.</span></h2></div><p>每一篇笔记，都是下一次思考的起点。<br>从目录中找到感兴趣的内容。</p></div>
-      <div class="archive-tools"><label class="search"><span aria-hidden="true">⌕</span><span class="sr-only">搜索文档</span><input id="search" type="search" placeholder="搜索文档或分类" autocomplete="off"><kbd>/</kbd></label><label class="filter-label"><span class="sr-only">选择分类</span><select id="category"><option value="">全部分类</option></select></label><span id="count" class="count" aria-live="polite">正在载入档案…</span></div>
-      <div class="list-head" aria-hidden="true"><span>DOCUMENT / 文档</span><span>CATEGORY / 分类</span><span>OPEN</span></div><div id="notes" class="notes" aria-live="polite"><p class="state">正在整理文档…</p></div>
-    </section>
-    <section class="about" id="about"><p class="section-label">A NOTE FROM LYNN</p><div><h2>保持好奇，<br>持续生长。</h2><p>这个空间用来整理学习过程中的笔记。将零散的知识放在一起，让新的想法有迹可循。</p><a href="https://github.com/Zone2022" target="_blank" rel="noopener noreferrer">更多关于我 ↗</a></div></section>
-  </main><footer><div><span>AN OPEN NOTEBOOK</span><a href="#top">回到顶部 ↑</a></div><strong>ZONE2022.</strong><p>Made for the curious. <span>© Zone2022</span></p></footer>
-  <dialog id="reader" aria-labelledby="reader-title"><div class="reader-shell"><header class="reader-bar"><a class="brand" href="#top">ZONE<span>2022</span><i>.</i></a><button id="close-reader" type="button" aria-label="关闭阅读器">关闭 <span>×</span></button></header><div class="reader-progress"><span></span></div><div class="reader-layout"><aside><p class="section-label">READING NOW</p><h2 id="reader-title"></h2><p id="reader-category"></p><div id="toc"></div></aside><article id="content" class="markdown"></article></div></div></dialog>
-</body></html>
-
-
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Lynn 的学习手记。收藏好奇，整理知识，让想法慢慢生长。"
+    />
+    <meta name="theme-color" content="#f5f2e9" />
+    <title>Lynn — 好奇心手记</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="assets/style.css" />
+    <script defer src="assets/vendor/marked.min.js"></script>
+    <script defer src="assets/vendor/purify.min.js"></script>
+    <script defer src="assets/scene.js"></script>
+    <script defer src="assets/app.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#archive">跳到学习手记</a>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Lynn 首页"
+        >Lynn<span class="brand-star">✳</span></a
+      >
+      <nav aria-label="主导航">
+        <a href="#archive">学习手记 <span>↙</span></a
+        ><a href="#about">关于这里</a
+        ><a
+          href="https://github.com/Zone2022/Zone2022.github.io"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub ↗</a
+        >
+      </nav>
+      <button
+        id="motion-toggle"
+        class="motion-toggle"
+        type="button"
+        aria-pressed="true"
+      >
+        动效 <span>ON</span>
+      </button>
+    </header>
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <div class="handwritten">A little space for big curiosities.</div>
+          <h1 id="hero-title">
+            把好奇，<br />写成<span class="underlined">日常。</span>
+          </h1>
+          <p>
+            你好，我是 Lynn。<br />把学到的、想到的、还没想明白的，都放在这里。
+          </p>
+          <a class="primary" href="#archive">翻开我的手记 <span>↗</span></a>
+          <div class="hero-footnote">
+            <span class="small-star">✳</span> 慢慢积累，总会连成一片。
+          </div>
+        </div>
+        <div class="hero-art" id="hero-art">
+          <div class="art-orbit" aria-hidden="true"></div>
+          <div class="art-note" aria-hidden="true">
+            STAY<br /><b>CURIOUS.</b><span>✶</span>
+          </div>
+          <canvas
+            id="notebook"
+            role="img"
+            aria-label="可拖动旋转的三渲二笔记本"
+          ></canvas>
+          <div id="scene-fallback" hidden>
+            <div class="fallback-book">
+              Lynn<br /><small>FIELD NOTES</small><span>✳</span>
+            </div>
+          </div>
+          <div class="art-caption">
+            <span>LYNN'S FIELD NOTES</span
+            ><button id="rotate-scene" type="button" aria-label="转动笔记本">
+              转动看看 ↻
+            </button>
+          </div>
+        </div>
+      </section>
+      <div class="chapter-strip" aria-hidden="true">
+        <span>LEARN SOMETHING.</span><span>✳</span><span>MAKE SOMETHING.</span
+        ><span>✳</span><span>KEEP WONDERING.</span>
+      </div>
+      <section class="archive" id="archive" aria-labelledby="archive-title">
+        <div class="section-heading">
+          <div>
+            <span class="handwritten">Collected, not completed.</span>
+            <h2 id="archive-title">
+              我的学习手记<span class="title-dot">.</span>
+            </h2>
+          </div>
+          <p>知识不必一次成形，<br />先留下一页，再慢慢补齐。</p>
+        </div>
+        <div class="archive-tools">
+          <label class="search"
+            ><svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              aria-hidden="true"
+            >
+              <circle cx="10.5" cy="10.5" r="6.5" />
+              <path d="m16 16 5 5" /></svg
+            ><span class="sr-only">搜索文档</span
+            ><input
+              id="search"
+              type="search"
+              placeholder="找一篇手记，或一个灵感…"
+              autocomplete="off"
+            /><kbd>/</kbd></label
+          ><label class="filter-label"
+            ><span class="sr-only">选择分类</span
+            ><select id="category">
+              <option value="">全部主题</option>
+            </select></label
+          ><span id="count" aria-live="polite">正在整理书架…</span>
+        </div>
+        <div id="notes" class="notes" aria-live="polite">
+          <p class="state">正在打开学习手记…</p>
+        </div>
+        <noscript
+          ><p>
+            启用 JavaScript 后可以浏览和搜索手记，也可以在
+            <a
+              href="https://github.com/Zone2022/Zone2022.github.io/tree/main/notes"
+              >GitHub 文档文件夹</a
+            >阅读 Markdown。
+          </p></noscript
+        >
+        <div class="archive-end">
+          <span>每一页，都算数。</span><span id="archive-total"></span>
+        </div>
+      </section>
+      <section class="about" id="about">
+        <div class="about-sketch" aria-hidden="true">
+          <span>✳</span>
+          <p>Work in<br /><em>progress.</em></p>
+        </div>
+        <div>
+          <span class="handwritten">A note from Lynn</span>
+          <h2>允许自己，<br />一直是个初学者。</h2>
+          <p>
+            这是一个还在生长的个人学习空间。记录理解，也留下疑问；收藏方法，也珍惜偶然发现的小事。希望每次回头翻阅，都能看到一点点进步。
+          </p>
+          <a
+            href="https://github.com/Zone2022"
+            target="_blank"
+            rel="noopener noreferrer"
+            >在 GitHub 找到我 ↗</a
+          >
+        </div>
+      </section>
+    </main>
+    <footer>
+      <a class="brand" href="#top">Lynn<span class="brand-star">✳</span></a>
+      <p>保持好奇。下次翻页见。</p>
+      <a href="#top">回到顶部 ↑</a
+      ><small>© Lynn · A notebook in progress.</small>
+    </footer>
+    <dialog id="reader" aria-labelledby="reader-title">
+      <div class="reader-shell">
+        <header class="reader-bar">
+          <span class="reader-brand">Lynn / 手记</span>
+          <div>
+            <button id="share-note" type="button">复制链接 ↗</button
+            ><button id="close-reader" type="button" aria-label="关闭阅读器">
+              合上手记 <span>×</span>
+            </button>
+          </div>
+        </header>
+        <div
+          class="reader-progress"
+          role="progressbar"
+          aria-label="阅读进度"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+        >
+          <span></span>
+        </div>
+        <div id="reader-scroll" class="reader-scroll">
+          <div class="reader-layout">
+            <aside>
+              <span id="reader-category"></span>
+              <h2 id="reader-title"></h2>
+              <p id="reading-time"></p>
+              <details id="toc-details" open>
+                <summary>本篇目录 <span>⌄</span></summary>
+                <nav id="toc" aria-label="文章目录"></nav>
+              </details>
+              <a
+                id="raw-note"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+                >查看 Markdown ↗</a
+              >
+            </aside>
+            <article id="content" class="markdown"></article>
+          </div>
+          <div class="reader-end">
+            ✳
+            <p>又多了一点点理解。</p>
+            <button id="close-bottom" type="button">返回手记列表 ↙</button>
+          </div>
+        </div>
+      </div>
+      <div
+        id="reader-toast"
+        class="reader-toast"
+        role="status"
+        aria-live="polite"
+      ></div>
+    </dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
