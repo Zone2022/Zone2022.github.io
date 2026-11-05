@@ -2,4 +2,3 @@
 layout: null
 ---
 [{% assign first = true %}{% for file in site.static_files %}{% assign prefix = file.path | slice: 0, 7 %}{% assign ext = file.extname | downcase %}{% if prefix == '/notes/' and ext == '.md' %}{% unless first %},{% endunless %}{{ file.path | relative_url | jsonify }}{% assign first = false %}{% endif %}{% endfor %}]
-

@@ -1,0 +1,11 @@
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - scripts
+  - tests
+  - node_modules
+  - package.json
+  - package-lock.json
+  - vendor
+  - TESTING.md
