@@ -23,15 +23,6 @@ body {
   font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
   line-height: 1.6;
 }
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  pointer-events: none;
-  opacity: 0.065;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.76' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23000' filter='url(%23n)' opacity='.4' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
-}
 body.reading {
   overflow: hidden;
 }
@@ -458,13 +449,6 @@ canvas:focus-visible {
 }
 .note:nth-child(3n + 3) .note-cover {
   background: #d9dfed;
-}
-.note-cover::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(#25282330 0.6px, transparent 0.8px) 0 0/5px 5px;
-  opacity: 0.4;
 }
 .sample-label {
   position: absolute;
@@ -1360,3 +1344,17 @@ html[data-motion="off"] .note:hover {
 .sample-label { font-size: 12px; }
 @media (max-width:600px) { .note-cover { min-height: 242px; } .note-bottom { font-size: 12px; } .note-category { font-size: 12px; } .sample-label { font-size: 11px; } .note-excerpt { font-size: 14px; } }
 #rotate-scene:disabled { color: var(--muted); cursor: default; }
+
+/* Use the projected ink colour and the paper underneath as the two blend inputs. */
+.ink-line { display: inline-block; }
+.title-lens { position: fixed; top: 0; left: 0; width: 64px; height: 64px; pointer-events: none; mix-blend-mode: difference; z-index: 9; }
+.title-lens::before { content: ''; display: block; height: 100%; border-radius: 50%; background: white; opacity: 0; transform: scale(.5); transition: opacity 150ms ease-out, transform 180ms ease-out; }
+.title-lens.is-visible::before { opacity: 1; transform: scale(1); }
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) { .title-lens { display: none; } }
+html[data-motion=off] .title-lens { display: none; }
+
+/* The fibres are tiled surfaces, so their physical scale stays consistent across viewports. */
+body { background-image: url('materials/desk-paper.webp'); background-size: 450px 450px; }
+.note-cover::before, .art-note::before, .about-sketch::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: url('materials/card-stock.webp') repeat 0 0 / 260px 260px; mix-blend-mode: multiply; opacity: .76; }
+.note-cover svg, .art-note b, .art-note span { position: relative; }
+.reader-shell, .note-body { background: var(--sheet) url('materials/writing-paper.webp') repeat 0 0 / 360px 360px; }

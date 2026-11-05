@@ -33,12 +33,36 @@
       program,
       compile(
         gl.FRAGMENT_SHADER,
-        `precision mediump float; varying vec3 n; varying vec2 vUv; uniform vec3 color; uniform bool useTexture; uniform sampler2D cover; void main(){float l=dot(normalize(n),normalize(vec3(-.5,.8,1.)));float shade=l>.65?1.:l>.1?.82:.60;vec3 base=useTexture?texture2D(cover,vUv).rgb:color;gl_FragColor=vec4(base*shade,1.);}`,
+        `precision mediump float;
+         varying vec3 n;
+         varying vec2 vUv;
+         uniform highp mat4 model;
+         uniform vec3 color;
+         uniform bool useTexture;
+         uniform sampler2D cover;
+         uniform sampler2D paperRelief;
+         void main() {
+           vec3 light = normalize(vec3(-.5, .8, 1.));
+           vec3 surface = normalize(n);
+           vec3 base = color;
+           float ink = 1.;
+           if (useTexture) {
+             base = texture2D(cover, vUv).rgb;
+             vec3 fibre = texture2D(paperRelief, vUv * vec2(1.8, 2.4)).rgb;
+             vec2 slope = fibre.rg * 2. - 1.;
+             vec3 normal = normalize(surface + mat3(model) * vec3(slope, 0.) * 1.4);
+             float relief = dot(normal, light) - dot(surface, light);
+             ink += clamp(relief * (1.1 - .45 * fibre.b), -.22, .18);
+           }
+           float diffuse = dot(surface, light);
+           float band = diffuse > .65 ? 1. : diffuse > .1 ? .82 : .60;
+           gl_FragColor = vec4(base * band * ink, 1.);
+         }`,
       ),
     );
     gl.linkProgram(program);
     if (!gl.getProgramParameter(program, gl.LINK_STATUS))
-      throw Error("WebGL link");
+      throw Error(gl.getProgramInfoLog(program) || "WebGL link");
     gl.useProgram(program);
     const loc = {};
     ["position", "normal", "uv"].forEach(
@@ -86,6 +110,28 @@
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    // RG stores the paper's tangent-space slope, B the roughness. A neutral
+    // texel allows the first frame to draw before the material arrives.
+    const reliefTexture = gl.createTexture();
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, reliefTexture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+      new Uint8Array([128, 128, 255, 255]));
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.uniform1i(gl.getUniformLocation(program, "paperRelief"), 1);
+    gl.activeTexture(gl.TEXTURE0);
+    const reliefImage = new Image();
+    reliefImage.onload = () => {
+      if (gl.isContextLost()) return;
+      gl.activeTexture(gl.TEXTURE1);
+      gl.bindTexture(gl.TEXTURE_2D, reliefTexture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, reliefImage);
+      gl.generateMipmap(gl.TEXTURE_2D);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+      gl.activeTexture(gl.TEXTURE0);
+      schedule();
+    };
+    reliefImage.src = "assets/materials/cover-relief.webp";
     const parts = [];
     function box(x, y, z, w, h, d, color, textured = false) {
       const X = w / 2,
@@ -396,3 +442,4 @@
     fallback();
   }
 })();
+

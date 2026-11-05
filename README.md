@@ -62,3 +62,9 @@ node scripts/check-build.mjs
 - DOMPurify 3.4.17，Apache-2.0 / MPL-2.0，许可证：`assets/vendor/DOMPurify.LICENSE`
 
 品牌文字均为 Lynn；仓库和 GitHub 用户链接保留实际账号 URL。
+
+## 纸材与标题交互
+
+首页标题上的圆形反色光标参考 [DeepSeek 官网](https://www.deepseek.com/)，支持精确指针，遵循动效开关和系统减少动态效果设置。
+
+纸材来自 ambientCG 的 [Paper001](https://ambientcg.com/view?id=Paper001) 和 [Paper006](https://ambientcg.com/view?id=Paper006)，按 [CC0](https://docs.ambientcg.com/license/) 使用。`assets/materials/` 内的三张平铺 WebP 将原材质的颜色、侧光法线和粗糙度烘焙为不同明度的纸面。三维封面另外采样 `cover-relief.webp` 的法线 XY 和粗糙度，以随笔记本姿态调整纤维的受光。
