@@ -105,6 +105,10 @@
   }
   function configure() {
     const next = desktop.matches && !quiet();
+    if (quiet()) {
+      stopTravel();
+      for (const animation of book.getAnimations()) animation.cancel();
+    }
     if (enhanced === next) { measure(); return; }
     const oldScene = activeScene;
     const readingBelow = scrollY >= archive.offsetTop - 35;
