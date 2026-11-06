@@ -417,6 +417,7 @@
     if (
       e.key === "/" &&
       !reader.open &&
+      !document.getElementById("entrance")?.open &&
       !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName) &&
       !document.activeElement.isContentEditable
     ) {
