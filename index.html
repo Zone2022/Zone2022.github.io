@@ -11,11 +11,13 @@
     <title>Lynn — 好奇心手记</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="assets/style.css" />
+    <link rel="stylesheet" href="assets/entrance.css" />
     <script defer src="assets/vendor/marked.min.js"></script>
     <script defer src="assets/vendor/purify.min.js"></script>
     <script defer src="assets/scene.js"></script>
     <script defer src="assets/app.js"></script>
     <script defer src="assets/title-lens.js"></script>
+    <script defer src="assets/entrance.js"></script>
   </head>
   <body>
     <a class="skip" href="#archive">跳到学习手记</a>
@@ -158,6 +160,7 @@
     <footer>
       <a class="brand" href="#top">Lynn<span class="brand-star">✳</span></a>
       <p>保持好奇。下次翻页见。</p>
+      <button id="replay-entrance" type="button" hidden>再看一次开场 ↗</button>
       <a href="#top">回到顶部 ↑</a
       ><small>© Lynn · A notebook in progress.</small>
     </footer>
@@ -217,5 +220,71 @@
       ></div>
     </dialog>
     <div id="toast" role="status" aria-live="polite"></div>
+    <dialog id="entrance" aria-labelledby="entrance-title" aria-describedby="entrance-description">
+      <div class="entry-paper entry-paper-left" aria-hidden="true"></div>
+      <div class="entry-paper entry-paper-right" aria-hidden="true"></div>
+      <div class="entry-landscape" aria-hidden="true">
+        <svg class="entry-cloud cloud-left" viewBox="0 0 240 100"><path d="M8 78C-2 53 22 39 48 47 43 6 106-6 123 35 145 8 184 21 182 48 225 39 247 67 229 79Z" fill="#fffdf7"/><path d="M45 80h158" stroke="#c7d4de" stroke-width="3"/></svg>
+        <svg class="entry-cloud cloud-right" viewBox="0 0 240 100"><path d="M8 78C-2 53 22 39 48 47 43 6 106-6 123 35 145 8 184 21 182 48 225 39 247 67 229 79Z" fill="#fffdf7"/></svg>
+        <div class="entry-hill hill-back"></div><div class="entry-hill hill-front"></div>
+        <svg class="entry-sprig sprig-left" viewBox="0 0 180 320" fill="none"><path d="M96 318C120 201 65 132 81 15M105 244 29 172M107 181 158 108" stroke="#617e81" stroke-width="5"/><g fill="#91aaa2"><path d="M79 79Q13 68 29 20 86 22 79 79M86 140Q138 103 121 64 76 82 86 140M104 204Q38 193 45 140 95 148 104 204M109 259Q167 236 162 187 111 194 109 259M65 204Q10 220 9 169 43 163 65 204M139 137Q119 88 159 61 184 104 139 137"/></g></svg>
+        <svg class="entry-sprig sprig-right" viewBox="0 0 180 320" fill="none"><path d="M96 318C120 201 65 132 81 15M105 244 29 172M107 181 158 108" stroke="#7586b8" stroke-width="5"/><g fill="#9cadd5"><path d="M79 79Q13 68 29 20 86 22 79 79M86 140Q138 103 121 64 76 82 86 140M104 204Q38 193 45 140 95 148 104 204M109 259Q167 236 162 187 111 194 109 259M65 204Q10 220 9 169 43 163 65 204M139 137Q119 88 159 61 184 104 139 137"/></g></svg>
+      </div>
+      <div class="entry-top"><span class="entry-wordmark">Lynn<span>✳</span></span><button id="skip-entrance" type="button">跳过开场 <span aria-hidden="true">↗</span></button></div>
+      <div class="entry-content">
+        <h2 id="entrance-title">好奇心，<br class="entry-mobile-break" />在这里发芽。</h2>
+        <p id="entrance-description">欢迎来到 Lynn 的纸上小世界。</p>
+        <div class="entry-picture" aria-hidden="true">
+          <svg class="entry-illustration" viewBox="0 0 680 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="entry-grain" width="256" height="256" patternUnits="userSpaceOnUse"><image href="assets/materials/card-stock.webp" width="256" height="256"/></pattern>
+              <clipPath id="entry-arch"><path d="M156 306V181a184 184 0 0 1 368 0v125Z"/></clipPath>
+            </defs>
+            <g class="entry-arch">
+              <path d="M146 312V181a194 194 0 0 1 388 0v131" fill="#d7ded6"/>
+              <path d="M156 306V181a184 184 0 0 1 368 0v125Z" fill="#bccfe2"/>
+              <g clip-path="url(#entry-arch)">
+                <circle cx="432" cy="83" r="33" fill="#f6dc8a"/>
+                <path d="M119 269Q225 174 329 235T562 217V327H119Z" fill="#8ca7bf"/>
+                <path d="M131 302Q233 232 327 276T549 258V336H131Z" fill="#748da1"/>
+                <path d="M156 306V181a184 184 0 0 1 368 0v125Z" fill="url(#entry-grain)" opacity=".2" style="mix-blend-mode:multiply"/>
+              </g>
+            </g>
+            <g class="entry-flying-note"><path d="m128 96 76-22-21 58-20-19-23 10 6-25Z" fill="#fffdf7"/><path d="m146 98 58-24-41 39m-17-15 17 15" stroke="#8b9bb2" stroke-width="2"/><path d="M122 118q-39 6-32 37t-37 39" stroke="#aab7bd" stroke-width="2" stroke-dasharray="4 7"/></g>
+            <g class="entry-sparkles" fill="#edc84e"><path d="m244 33 4 13 14 4-14 5-4 13-4-13-14-5 14-4ZM552 134l5 18 18 5-18 5-5 18-5-18-18-5 18-5Z"/><circle cx="207" cy="155" r="4"/><circle cx="477" cy="189" r="3"/></g>
+            <ellipse cx="341" cy="326" rx="190" ry="17" fill="#506881" opacity=".13"/>
+            <g class="entry-books">
+              <path d="m200 280 273-10 21 21-272 16Z" fill="#f0cb64"/><path d="m222 307 272-16v26l-272 15Z" fill="#dfb544"/><path d="m200 280 22 27v25l-22-24Z" fill="#c59e3b"/>
+              <path d="m233 308 250-14v18l-250 14Z" fill="#fff9e7"/><path d="m242 314 231-13m-223 19 217-13" stroke="#d4c6a4" stroke-width="1.5"/>
+              <path d="m191 245 266-13 26 28-267 17Z" fill="#526bc1"/><path d="m216 277 267-17v25l-267 18Z" fill="#2e43ae"/><path d="m191 245 25 32v26l-25-30Z" fill="#263a8a"/>
+              <path d="m229 279 243-16v17l-243 17Z" fill="#f6f2df"/><path d="m242 285 218-15m-212 20 207-14" stroke="#c9c8b7" stroke-width="1.5"/>
+              <path d="m191 245 266-13 26 28-267 17Z" fill="url(#entry-grain)" opacity=".24" style="mix-blend-mode:multiply"/>
+              <path d="m425 285 15-1 1 37-8-7-7 8Z" fill="#bc7762"/>
+              <path d="m242 249 50-2" stroke="#9eaee3" stroke-width="3" stroke-linecap="round"/>
+            </g>
+            <g class="entry-bunny">
+              <ellipse cx="350" cy="242" rx="62" ry="12" fill="#233679" opacity=".18"/>
+              <circle cx="403" cy="216" r="20" fill="#e7e1cc"/>
+              <path d="M302 192c-12 18-13 45 0 51 24 11 75 10 91-6 11-11-1-41-15-54Z" fill="#fff9e8"/>
+              <path d="M317 120c-27-26-41-72-23-77 19-5 38 44 40 69M354 110c-3-45 11-81 28-73 14 8-1 59-13 82" fill="#fff9e8" stroke="#d6ceb8" stroke-width="2"/>
+              <path d="M318 103q-24-40-20-48 12 1 25 46M360 99q1-43 15-49 4 12-9 50" fill="#e5b9ac"/>
+              <path d="M288 159c0-35 23-57 56-56 38 0 63 23 64 55 1 34-24 47-61 46-38-1-59-17-59-45Z" fill="#fff9e8" stroke="#d6ceb8" stroke-width="2"/>
+              <g class="entry-bunny-eyes" fill="#343d4b"><ellipse cx="321" cy="157" rx="4" ry="6"/><ellipse cx="374" cy="157" rx="4" ry="6"/></g>
+              <ellipse cx="308" cy="173" rx="10" ry="5" fill="#e8b5a7"/><ellipse cx="388" cy="173" rx="10" ry="5" fill="#e8b5a7"/>
+              <path d="m342 168 6 4 6-4m-6 4v5m-8 0q8 8 16 0" stroke="#6c6262" stroke-width="2" stroke-linecap="round"/>
+              <path d="m310 196 36 13 36-12-1 39-35 13-35-13Z" fill="#91aaa2" stroke="#627f7b" stroke-width="2"/><path d="m346 209v40" stroke="#627f7b" stroke-width="2"/>
+              <path d="m318 207 19 7m-19 1 19 7m17-8 18-6" stroke="#e0e7d8" stroke-width="2"/>
+              <ellipse cx="309" cy="220" rx="9" ry="13" fill="#fff9e8" transform="rotate(-24 309 220)"/><ellipse cx="383" cy="219" rx="9" ry="13" fill="#fff9e8" transform="rotate(24 383 219)"/>
+              <ellipse cx="317" cy="246" rx="17" ry="9" fill="#fff9e8"/><ellipse cx="377" cy="245" rx="17" ry="9" fill="#fff9e8"/>
+            </g>
+            <g class="entry-flower"><path d="M543 310q-4-50-16-74m13 49 23-23" stroke="#658b80" stroke-width="3"/><path d="M534 270q-34 0-29-26 29 0 29 26m12 17q28-6 28-29-29 7-28 29" fill="#91aaa2"/><g fill="#edc84e"><ellipse cx="527" cy="227" rx="11" ry="22"/><ellipse cx="527" cy="227" rx="11" ry="22" transform="rotate(60 527 227)"/><ellipse cx="527" cy="227" rx="11" ry="22" transform="rotate(120 527 227)"/></g><circle cx="527" cy="227" r="8" fill="#a58144"/><path d="M522 294h41l-5 25h-31Z" fill="#c8d3d2"/></g>
+            <g fill="#f7f3e7" stroke="#c6cbbd" stroke-width="1.5"><path d="m132 266 32-20 19 22-35 20Z"/><path d="m139 271 23-15m-17 20 24-15"/></g>
+          </svg>
+        </div>
+        <button id="enter-site" class="entry-enter" type="button" autofocus>翻开小世界 <span aria-hidden="true">↗</span></button>
+        <p class="entry-note">写一点，学一点，慢慢长大。</p>
+      </div>
+      <span class="entry-bottom" aria-hidden="true">A little space for big curiosities.</span>
+    </dialog>
   </body>
 </html>

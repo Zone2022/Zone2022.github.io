@@ -68,3 +68,13 @@ node scripts/check-build.mjs
 首页标题上的圆形反色光标参考 [DeepSeek 官网](https://www.deepseek.com/)，支持精确指针，遵循动效开关和系统减少动态效果设置。
 
 纸材来自 ambientCG 的 [Paper001](https://ambientcg.com/view?id=Paper001) 和 [Paper006](https://ambientcg.com/view?id=Paper006)，按 [CC0](https://docs.ambientcg.com/license/) 使用。`assets/materials/` 内的三张平铺 WebP 将原材质的颜色、侧光法线和粗糙度烘焙为不同明度的纸面。三维封面另外采样 `cover-relief.webp` 的法线 XY 和粗糙度，以随笔记本姿态调整纤维的受光。
+
+## 纸上小世界开场
+
+`assets/entrance.css` 和 `assets/entrance.js` 管理独立的纸艺入口，原创 SVG 插画位于 `index.html` 的 `#entrance` 内。小兔、书本、纸飞机、纸云和植物使用矢量图，纸面复用现有 CC0 材质，无新增字体、动画库、视频或远程资源请求。
+
+以原神「彩鹞栉春风」活动页的纸绘层次为视觉参考，Lynn 的插画和双页展开动作独立制作；未使用活动页的美术、模型、音频或脚本。参考页在本次环境中停留于加载场景，完整原版入场未能直接验证。
+
+首次访问无锚点的首页显示开场，点击「翻开小世界」后两侧纸页约 1.4 秒展开；「跳过开场」或 Esc 立即进入。`sessionStorage` 在当前标签页会话中记住已进入状态，刷新不重复播放。文章与书架等锚点链接直接打开目标内容；页脚可「再看一次开场」。系统减少动态效果或站内动效关闭时保持静态插画并立即进入。
+
+使用原生模态 dialog 隔离键盘焦点，关闭后恢复焦点与滚动。JavaScript 未加载时开场默认隐藏。没有额外材质包需要安装。
