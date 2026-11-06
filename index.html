@@ -12,12 +12,14 @@
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="assets/style.css" />
     <link rel="stylesheet" href="assets/entrance.css" />
+    <link rel="stylesheet" href="assets/journey.css" />
     <script defer src="assets/vendor/marked.min.js"></script>
     <script defer src="assets/vendor/purify.min.js"></script>
     <script defer src="assets/scene.js"></script>
     <script defer src="assets/app.js"></script>
     <script defer src="assets/title-lens.js"></script>
     <script defer src="assets/entrance.js"></script>
+    <script defer src="assets/journey.js"></script>
   </head>
   <body>
     <a class="skip" href="#archive">跳到学习手记</a>
@@ -26,6 +28,7 @@
         >Lynn<span class="brand-star">✳</span></a
       >
       <nav aria-label="主导航">
+        <a href="#directory">好奇心目录</a>
         <a href="#archive">学习手记 <span>↙</span></a
         ><a href="#about">关于这里</a
         ><a
@@ -45,6 +48,8 @@
       </button>
     </header>
     <main id="top">
+      <div id="journey" class="journey">
+      <div class="journey-stage">
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
           <div class="handwritten">A little space for big curiosities.</div>
@@ -54,7 +59,8 @@
           <p>
             你好，我是 Lynn。<br />把学到的、想到的、还没想明白的，都放在这里。
           </p>
-          <a class="primary" href="#archive">翻开我的手记 <span>↗</span></a>
+          <a class="primary" href="#directory">翻开好奇心目录 <span>↗</span></a>
+          <a class="journey-shortcut" href="#archive">直接看手记 ↓</a>
           <div class="hero-footnote">
             <span class="small-star">✳</span> 慢慢积累，总会连成一片。
           </div>
@@ -82,6 +88,30 @@
           </div>
         </div>
       </section>
+      <section id="directory" class="directory" aria-labelledby="directory-title">
+        <div class="directory-desk">
+          <div class="directory-intro">
+            <span class="handwritten">Follow your curiosity.</span>
+            <h2 id="directory-title">让好奇心，<br />找到下一页。</h2>
+            <p>从一个感兴趣的方向开始，<br />看看最近留下了哪些笔记。</p>
+            <div class="directory-bunny" aria-hidden="true"></div>
+            <a class="directory-all" href="#archive" data-all-notes>浏览全部手记 <span>↗</span></a>
+          </div>
+          <div class="directory-book">
+            <div class="directory-book-heading"><span>Lynn / 好奇心目录</span><span id="directory-count" aria-live="polite">正在整理…</span></div>
+            <div id="bookmarks" class="bookmarks" aria-label="学习主题"><p class="directory-loading">正在打开目录…</p></div>
+            <p class="directory-book-foot">每个问题，都值得留下一页。</p>
+          </div>
+        </div>
+      </section>
+      <div class="journey-sheet" aria-hidden="true"><span>Lynn</span><i></i><b>好奇心手记</b></div>
+      </div>
+      </div>
+      <nav class="journey-nav" aria-label="手账章节" hidden>
+        <button type="button" data-scene="0" aria-label="回到书桌" aria-current="step"><i></i><span>书桌</span></button>
+        <button type="button" data-scene="1" aria-label="前往好奇心目录"><i></i><span>目录</span></button>
+        <button type="button" data-scene="2" aria-label="直接前往学习手记"><i></i><span>手记</span></button>
+      </nav>
       <div class="chapter-strip" aria-hidden="true">
         <span>LEARN SOMETHING.</span><span>✳</span><span>MAKE SOMETHING.</span
         ><span>✳</span><span>KEEP WONDERING.</span>

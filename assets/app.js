@@ -471,8 +471,12 @@
         category.append(o);
       });
       render();
+      document.dispatchEvent(new CustomEvent("notesready", {
+        detail: notes.map(({category, title}) => ({category, title})),
+      }));
       route();
     } catch {
+      document.dispatchEvent(new Event("noteserror"));
       list.innerHTML =
         '<div class="state">书架暂时没有打开。<br><button id="retry-index" type="button">重新加载目录</button></div>';
       $("count").textContent = "连接未完成";

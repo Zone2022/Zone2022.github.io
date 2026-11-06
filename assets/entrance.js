@@ -64,13 +64,14 @@
     deadline = setTimeout(finish, 1900);
     try {
       const curve = 'cubic-bezier(.65,0,.25,1)';
-      animate(find('.entry-content'), [{opacity: 1, transform: 'scale(1)'}, {opacity: 0, transform: 'scale(1.12) translateY(-24px)'}], {duration: 480, easing: 'ease-in'});
+      animate(find('.entry-bunny'), [{transform: 'translateY(0) rotate(0deg)'}, {transform: 'translateY(-22px) rotate(-4deg)', offset: .45}, {transform: 'translateY(8px) rotate(2deg)'}], {duration: 550, easing: 'ease-in-out'});
+      animate(find('.entry-content'), [{opacity: 1, transform: 'scale(1)'}, {opacity: 1, transform: 'scale(1.04)', offset: .35}, {opacity: 0, transform: 'scale(1.16) translateY(-24px)'}], {duration: 650, easing: 'ease-in'});
       animate(find('.entry-landscape'), [{opacity: 1, transform: 'scale(1)'}, {opacity: 0, transform: 'scale(1.18)'}], {duration: 700, easing: curve});
       animate(find('.entry-top'), [{opacity: 1}, {opacity: 0}], {duration: 230});
       animate(find('.entry-bottom'), [{opacity: 1}, {opacity: 0}], {duration: 230});
-      const left = animate(find('.entry-paper-left'), [{transform: 'translateX(0) rotateY(0deg)'}, {transform: 'translateX(-12%) rotateY(-104deg)'}], {duration: 1200, delay: 160, easing: curve});
-      const right = animate(find('.entry-paper-right'), [{transform: 'translateX(0) rotateY(0deg)'}, {transform: 'translateX(12%) rotateY(104deg)'}], {duration: 1200, delay: 160, easing: curve});
-      animate(document.querySelector('.hero'), [{opacity: .35, transform: 'translateY(22px) scale(.98)'}, {opacity: 1, transform: 'none'}], {duration: 900, delay: 420, easing: 'cubic-bezier(.16,1,.3,1)'});
+      const left = animate(find('.entry-paper-left'), [{transform: 'translateX(0) rotateY(0deg)'}, {transform: 'translateX(-18%) rotateY(-108deg)'}], {duration: 1120, delay: 230, easing: curve});
+      const right = animate(find('.entry-paper-right'), [{transform: 'translateX(0) rotateY(0deg)'}, {transform: 'translateX(18%) rotateY(108deg)'}], {duration: 1120, delay: 290, easing: curve});
+      if (scrollY < innerHeight / 2) animate(document.querySelector('.hero-copy'), [{opacity: .35, transform: 'translateY(22px)'}, {opacity: 1, transform: 'none'}], {duration: 850, delay: 450, easing: 'cubic-bezier(.16,1,.3,1)'});
       await Promise.all([left.finished, right.finished]);
     } catch { /* Esc, motion changes and navigation may cancel the sequence. */ }
     finally { finish(); }
