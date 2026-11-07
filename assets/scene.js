@@ -245,8 +245,10 @@
     function render(time = 0) {
       frame = 0;
       if (document.hidden || !visible) return;
-      const rect = canvas.getBoundingClientRect(),
+      // CSS scene transforms must not reallocate the WebGL drawing buffer per frame.
+      const rect = { width: canvas.clientWidth, height: canvas.clientHeight },
         dpr = Math.min(devicePixelRatio || 1, 2);
+      if (!rect.width || !rect.height) return;
       if (
         canvas.width !== Math.round(rect.width * dpr) ||
         canvas.height !== Math.round(rect.height * dpr)
