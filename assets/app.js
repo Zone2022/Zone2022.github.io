@@ -13,6 +13,7 @@
     request = 0,
     pushed = false,
     closing = false,
+    readingScroll = 0,
     toastTimer,
     observer;
   const cache = new Map(),
@@ -150,6 +151,7 @@
     document.title = `${note.title} — Lynn`;
     const alreadyOpen = reader.open;
     if (!alreadyOpen) {
+      readingScroll = scrollY;
       const from = source?.getBoundingClientRect();
       reader.showModal();
       document.body.classList.add("reading");
@@ -345,6 +347,9 @@
     closing = false;
     document.title = "Lynn — 好奇心手记";
     trigger?.focus({ preventScroll: true });
+    if (!document.body.classList.contains('theatre-ready') || document.body.dataset.scene === 'notes') {
+      scrollTo({ top: readingScroll, behavior: 'instant' });
+    }
   }
   function route() {
     if (location.hash.startsWith("#note=")) {
@@ -380,7 +385,9 @@
       search.value = "";
       category.value = "";
       render();
-      search.focus();
+      if (document.body.classList.contains("theatre-ready")) {
+        document.dispatchEvent(new Event("show-notes-search"));
+      } else search.focus();
     }
   });
   $("close-reader").onclick = close;
@@ -422,7 +429,9 @@
       !document.activeElement.isContentEditable
     ) {
       e.preventDefault();
-      search.focus();
+      if (document.body.classList.contains("theatre-ready")) {
+        document.dispatchEvent(new Event("show-notes-search"));
+      } else search.focus();
     }
   });
   async function load() {
@@ -471,12 +480,8 @@
         category.append(o);
       });
       render();
-      document.dispatchEvent(new CustomEvent("notesready", {
-        detail: notes.map(({category, title}) => ({category, title})),
-      }));
       route();
     } catch {
-      document.dispatchEvent(new Event("noteserror"));
       list.innerHTML =
         '<div class="state">书架暂时没有打开。<br><button id="retry-index" type="button">重新加载目录</button></div>';
       $("count").textContent = "连接未完成";
