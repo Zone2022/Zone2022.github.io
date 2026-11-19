@@ -1,3 +1,23 @@
+plugins:
+  - jekyll-optional-front-matter
+whitelist:
+  - jekyll-optional-front-matter
+kramdown:
+  input: Kramdown
+collections:
+  notebook_indexes:
+    output: true
+defaults:
+  - scope:
+      path: notes
+      type: pages
+    values:
+      layout: note-link
+optional_front_matter:
+  remove_originals: false
+include:
+  - notes/**/*.md
+  - notes/*.md
 exclude:
   - README.md
   - Gemfile

@@ -1,0 +1,9 @@
+{% assign source_url = page.path | relative_url %}
+{% assign reader_url = '/' | relative_url | append: '#note=' %}
+<!doctype html>
+<html lang="zh-CN">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.name | escape }} · Lynn</title>
+  <a href="{{ reader_url }}{{ source_url | url_encode }}">在 Lynn 的手记中打开 {{ page.name | escape }}</a>
+</html>
