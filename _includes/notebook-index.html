@@ -1,0 +1,30 @@
+{%- assign first = true -%}
+{%- assign originals = site.static_files | map: 'path' -%}
+[
+{%- for doc in site.pages -%}
+  {%- assign folder = doc.path | slice: 0, 6 -%}
+  {%- assign extension = doc.path | slice: -3, 3 | downcase -%}
+  {%- unless folder == 'notes/' and extension == '.md' -%}{%- continue -%}{%- endunless -%}
+  {%- assign original = doc.path | prepend: '/' -%}
+  {%- unless originals contains original -%}{%- continue -%}{%- endunless -%}
+  {%- unless first -%},{%- endunless -%}
+  {%- assign first = false -%}
+  {"path":{{ doc.path | relative_url | jsonify }},
+  {%- if include.mode == 'search' -%}
+    "text":{{ doc.content | jsonify }}
+  {%- else -%}
+    {%- assign pieces = doc.path | split: '/' -%}
+    {%- assign count = pieces.size | minus: 2 -%}
+    {%- assign title_length = pieces.last.size | minus: 3 -%}
+    {%- assign category = pieces | slice: 1, count | join: ' / ' -%}
+    {%- assign html = doc.content | markdownify -%}
+    {%- assign paragraphs = html | split: '<p>' -%}
+    {%- assign summary = paragraphs[1] | split: '</p>' | first | strip_html | strip_newlines | strip | replace: '&lt;', '<' | replace: '&gt;', '>' | replace: '&quot;', '"' | replace: '&amp;', '&' -%}
+    "title":{{ pieces.last | slice: 0, title_length | jsonify }},
+    "category":{{ category | default: '开始这里' | jsonify }},
+    "excerpt":{{ summary | truncate: 100 | jsonify }},
+    "minutes":{{ html | strip_html | strip_newlines | remove: ' ' | size | plus: 449 | divided_by: 450 | at_least: 1 }},
+    "sample":{% if doc.content contains '示例文档' or doc.content contains '示例手记' %}true{% else %}false{% endif %}
+  {%- endif -%}}
+{%- endfor -%}
+]

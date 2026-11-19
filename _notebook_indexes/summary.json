@@ -1,0 +1,5 @@
+---
+layout: null
+permalink: /archive-index.json
+---
+{% include notebook-index.html mode="summary" %}

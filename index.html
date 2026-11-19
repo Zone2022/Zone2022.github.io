@@ -88,12 +88,10 @@
       <section class="archive" id="archive" aria-labelledby="archive-title">
         <div class="section-heading">
           <div>
-            <span class="handwritten">Collected, not completed.</span>
             <h2 id="archive-title">
               我的学习手记<span class="title-dot">.</span>
             </h2>
           </div>
-          <p>知识不必一次成形，<br />先留下一页，再慢慢补齐。</p>
         </div>
         <div class="archive-tools">
           <label class="search"
@@ -109,10 +107,11 @@
             ><span class="sr-only">搜索文档</span
             ><input
               id="search"
+              aria-keyshortcuts="/"
               type="search"
-              placeholder="找一篇手记，或一个灵感…"
+              placeholder="搜索标题或正文"
               autocomplete="off"
-            /><kbd>/</kbd></label
+            /><kbd aria-hidden="true">/</kbd></label
           ><label class="filter-label"
             ><span class="sr-only">选择分类</span
             ><select id="category">
@@ -120,9 +119,8 @@
             </select></label
           ><span id="count" aria-live="polite">正在整理书架…</span>
         </div>
-        <div id="notes" class="notes" aria-live="polite">
-          <p class="state">正在打开学习手记…</p>
-        </div>
+        <div id="archive-status" class="archive-status" role="status"></div>
+        <ul id="notes" class="notes" aria-label="学习手记" aria-busy="true"></ul>
         <noscript
           ><p>
             启用 JavaScript 后可以浏览和搜索手记，也可以在
@@ -210,7 +208,7 @@
                 >查看 Markdown ↗</a
               >
             </aside>
-            <article id="content" class="markdown"></article>
+            <article id="content" tabindex="-1" class="markdown"></article>
           </div>
           <div class="reader-end">
             ✳

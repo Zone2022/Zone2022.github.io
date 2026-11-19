@@ -7,6 +7,8 @@ html { scrollbar-gutter: stable; }
 .theatre-ready[data-scene="tail"] :is(.hero,.archive) { display: none; }
 .theatre-ready .hero { min-height: calc(100svh - 102px); }
 .theatre-ready .archive { min-height: calc(100svh - 102px); padding-bottom: 120px; }
+.theatre-ready[data-scene="notes"] .archive { min-height: 0; padding-bottom: 32px; }
+.theatre-ready[data-scene="notes"] .scene-nav { position: static; width: max-content; margin: 0 var(--pad) 24px auto; }
 .theatre-ready .about { min-height: calc(100svh - 260px); }
 .theatre-ready footer { padding-bottom: 100px; }
 .scene-scroll-hint { display: block; margin-top: 23px; color: #637267; font-size: 12px; letter-spacing: .08em; }

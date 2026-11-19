@@ -10,6 +10,8 @@ Lynn 的个人学习网站，保留 GitHub Pages + Jekyll 静态发布方式。
 
 文件名用作卡片标题；普通 Markdown 正文会自动生成摘要、阅读时间、搜索索引和文章目录。支持中文文件名、相对图片和 Markdown 文档间链接。
 
+Jekyll 构建时生成轻量书架索引和独立的全文索引。打开书架只加载标题、摘要和阅读时长，输入搜索词时才获取全文索引；阅读器按需读取原始 Markdown。两个 JSON 模板在 `_notebook_indexes/`，通过 GitHub Pages 支持的 `jekyll-optional-front-matter` 读取普通 Markdown。已有本地环境更新后运行一次 `bundle install`。
+
 请勿在文件开头加入 Jekyll 的 `---` front matter，否则文件会被作为页面处理而不会进入原始 Markdown 索引。文件/文件夹不要以下划线或点开头（Jekyll 默认忽略），扩展名使用小写 `.md`。删除或移动文档后，原分享链接可能失效。
 
 这是公开静态网站，上传到仓库的内容会公开；页面上的阅读器不向仓库写文件。

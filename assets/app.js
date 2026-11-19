@@ -78,26 +78,64 @@
   function icon(i) {
     return `<svg viewBox="0 0 160 140" fill="none" stroke="#252823" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${illustrations[i % illustrations.length]}</svg>`;
   }
+  let archiveReady = false;
+  let searchText = new Map();
+  let searchState = "idle";
+  let pageTurn;
+  const compactReader = matchMedia("(max-width: 760px)");
+  compactReader.addEventListener("change", () => {
+    if (reader.open) $("toc-details").open = !compactReader.matches;
+  });
+  const status = $("archive-status");
+
+  async function fetchIndex(path) {
+    const response = await fetch(path, { signal: AbortSignal.timeout(15000) });
+    if (!response.ok) throw Error("无法读取索引");
+    const rows = await response.json();
+    if (!Array.isArray(rows)) throw Error("索引格式无效");
+    return rows;
+  }
+
+  async function loadSearch() {
+    searchState = "loading";
+    try {
+      const rows = await fetchIndex("archive-search.json");
+      searchText = new Map(rows.map(row => [row.path, row.text.toLocaleLowerCase()]));
+      searchState = "ready";
+    } catch {
+      searchState = "error";
+    }
+    render();
+  }
+
+  function card(n) {
+    return `<li><button class="note" type="button" data-path="${esc(n.path)}">
+      <span class="note-cover" aria-hidden="true">${icon(n.index)}</span>
+      <span class="note-body"><span class="note-title">${esc(n.title)}</span>
+      <span class="note-excerpt">${esc(n.excerpt)}</span>
+      <span class="note-bottom"><span class="note-category">${esc(n.category)}</span>
+      <span>约 ${n.minutes} 分钟${n.sample ? " · 示例" : ""}</span></span></span>
+    </button></li>`;
+  }
+
   function render() {
-    const q = search.value.trim().toLocaleLowerCase(),
-      selected = category.value;
-    const visible = notes.filter(
-      (n) =>
-        (!selected || n.category === selected) &&
-        `${n.title} ${n.category} ${n.text || ""}`
-          .toLocaleLowerCase()
-          .includes(q),
-    );
+    if (!archiveReady) return;
+    const query = search.value.trim().toLocaleLowerCase();
+    if (query && searchState === "idle") loadSearch();
+    const visible = notes.filter(note =>
+      (!category.value || note.category === category.value) &&
+      (`${note.title} ${note.category} ${note.excerpt}`.toLocaleLowerCase().includes(query) ||
+        searchText.get(note.path)?.includes(query)));
+    const focusedPath = document.activeElement?.closest("#notes [data-path]")?.dataset.path;
+    list.innerHTML = visible.map(card).join("");
+    if (focusedPath) list.querySelector(`[data-path="${CSS.escape(focusedPath)}"]`)?.focus({preventScroll:true});
     $("count").textContent = `${visible.length} / ${notes.length} 篇手记`;
-    $("archive-total").textContent = `${notes.length} 篇记录 · 持续生长中`;
-    list.innerHTML = visible.length
-      ? visible
-          .map(
-            (n, i) =>
-              `<button class="note" type="button" data-path="${esc(n.path)}" style="--i:${Math.min(i, 5)}"><span class="note-cover">${n.sample ? '<span class="sample-label">示例手记</span>' : ""}${icon(n.index)}</span><span class="note-body"><span class="note-category">${esc(n.category)}</span><span class="note-title">${esc(n.title)}</span><span class="note-excerpt">${esc(n.excerpt || "打开这篇手记，继续探索。")}</span><span class="note-bottom"><span>${n.minutes ? `约 ${n.minutes} 分钟阅读` : "Markdown 手记"}</span><span class="note-arrow" aria-hidden="true">↗</span></span></span></button>`,
-          )
-          .join("")
-      : '<div class="state">没有找到这篇手记。<br><button id="reset-search" type="button">清除搜索与分类</button></div>';
+    $("archive-total").textContent = `${notes.length} 篇记录`;
+    if (!notes.length) status.textContent = "书架上还没有手记。将 Markdown 文件上传到 notes/ 后，即会在这里出现。";
+    else if (query && searchState === "loading") status.textContent = "正在检索全文…";
+    else if (query && searchState === "error") status.innerHTML = '全文暂时无法检索，当前显示标题与摘要匹配项。 <button id="retry-search">重试全文搜索</button>';
+    else if (!visible.length) status.innerHTML = '没有符合条件的手记。 <button id="reset-search">清除搜索与分类</button>';
+    else status.replaceChildren();
   }
   async function fetchNote(note, retry = false) {
     if (retry) cache.delete(note.path);
@@ -115,17 +153,6 @@
     }
     return cache.get(note.path);
   }
-  function meta(note, md) {
-    note.text = md;
-    note.sample = /示例文档|示例手记/.test(md);
-    note.minutes = Math.max(1, Math.ceil(md.replace(/\s/g, "").length / 450));
-    note.excerpt = md
-      .split("\n")
-      .filter((s) => s.trim() && !/^(#|>|```|\||-|\d+\.)/.test(s.trim()))
-      .join(" ")
-      .replace(/[`*_\[\]]/g, "")
-      .slice(0, 100);
-  }
   function syncProgress() {
     const max = scroller.scrollHeight - scroller.clientHeight,
       ratio = max > 0 ? scroller.scrollTop / max : 0;
@@ -140,17 +167,21 @@
     const id = ++request;
     active = note;
     trigger = source || trigger;
-    observer?.disconnect();
-    $("reader-title").textContent = note.title;
-    $("reader-category").textContent = note.category;
-    $("reading-time").textContent = "正在取出这篇手记…";
-    $("raw-note").href = note.url;
-    $("toc").replaceChildren();
-    $("toc-details").open = innerWidth > 760;
-    content.textContent = "正在翻开这一页…";
-    document.title = `${note.title} — Lynn`;
+    pageTurn?.skipTransition();
     const alreadyOpen = reader.open;
+    content.setAttribute("aria-busy", "true");
+    function setHeading() {
+      $("reader-title").textContent = note.title;
+      $("reader-category").textContent = note.category;
+      $("raw-note").href = note.url;
+      document.title = `${note.title} — Lynn`;
+    }
+    $("reading-time").textContent = "正在翻开手记…";
     if (!alreadyOpen) {
+      setHeading();
+      content.textContent = "正在读取正文…";
+      $("toc").replaceChildren();
+      $("toc-details").open = !compactReader.matches;
       readingScroll = scrollY;
       const from = source?.getBoundingClientRect();
       reader.showModal();
@@ -172,18 +203,36 @@
         );
       }
     }
-    scroller.scrollTop = 0;
-    syncProgress();
     try {
       const md = await fetchNote(note);
       if (id !== request || !reader.open) return;
-      meta(note, md);
-      $("reading-time").textContent = `约 ${note.minutes} 分钟阅读`;
-      if (!window.marked || !window.DOMPurify) throw Error("阅读组件未能加载");
-      content.innerHTML = DOMPurify.sanitize(marked.parse(md), {
+      const html = DOMPurify.sanitize(marked.parse(md), {
         FORBID_TAGS: ["style", "form", "iframe"],
         FORBID_ATTR: ["style"],
       });
+      const replaceArticle = () => {
+        if (id !== request || !reader.open) return;
+        setHeading();
+        $("reading-time").textContent = `约 ${note.minutes} 分钟阅读`;
+        $("toc").replaceChildren();
+        observer?.disconnect();
+        content.innerHTML = html;
+        scroller.scrollTo({top: 0, behavior: "instant"});
+        if (alreadyOpen) content.focus({preventScroll:true});
+      };
+      if (alreadyOpen && document.startViewTransition && !reduced()) {
+        document.documentElement.classList.add("turning-article");
+        const turn = document.startViewTransition(replaceArticle);
+        pageTurn = turn;
+        turn.finished.finally(() => {
+          if (pageTurn === turn) {
+            pageTurn = null;
+            document.documentElement.classList.remove("turning-article");
+          }
+        }).catch(() => {});
+        await turn.updateCallbackDone;
+      } else replaceArticle();
+      if (id !== request || !reader.open) return;
       const ids = new Set();
       content.querySelectorAll("h1,h2,h3").forEach((h, i) => {
         let slug =
@@ -289,9 +338,17 @@
         { root: scroller, rootMargin: "0px 0px -65% 0px", threshold: 0 },
       );
       content.querySelectorAll("h2,h3").forEach((h) => observer.observe(h));
+      $("toc-details").hidden = !$("toc").childElementCount;
+      content.setAttribute("aria-busy", "false");
       requestAnimationFrame(syncProgress);
     } catch (error) {
       if (id !== request || !reader.open) return;
+      setHeading();
+      observer?.disconnect();
+      $("toc").replaceChildren();
+      $("toc-details").hidden = true;
+      content.setAttribute("aria-busy", "false");
+      scroller.scrollTo({top: 0, behavior: "instant"});
       $("reading-time").textContent = "暂时无法打开";
       content.replaceChildren();
       const p = document.createElement("p");
@@ -326,6 +383,7 @@
   async function hide() {
     if (!reader.open || closing) return;
     closing = true;
+    pageTurn?.skipTransition();
     ++request;
     active = null;
     observer?.disconnect();
@@ -346,12 +404,14 @@
     document.body.classList.remove("reading");
     closing = false;
     document.title = "Lynn — 好奇心手记";
-    trigger?.focus({ preventScroll: true });
+    const origin = trigger?.isConnected ? trigger : list.querySelector(`[data-path="${CSS.escape(trigger?.dataset.path || "")}"]`);
+    (origin || search).focus({ preventScroll: true });
     if (!document.body.classList.contains('theatre-ready') || document.body.dataset.scene === 'notes') {
       scrollTo({ top: readingScroll, behavior: 'instant' });
     }
   }
   function route() {
+    if (!archiveReady) return;
     if (location.hash.startsWith("#note=")) {
       let path;
       try {
@@ -381,6 +441,10 @@
       const n = notes.find((n) => n.path === b.dataset.path);
       if (n) navigate(n, b);
     }
+  });
+  status.addEventListener("click", (e) => {
+    if (e.target.id === "retry-index") load();
+    if (e.target.id === "retry-search") { searchState = "idle"; search.focus(); render(); }
     if (e.target.id === "reset-search") {
       search.value = "";
       category.value = "";
@@ -435,44 +499,17 @@
     }
   });
   async function load() {
+    list.setAttribute("aria-busy", "true");
+    status.textContent = "";
+    $("count").textContent = "正在整理书架…";
+    const placeholder = setTimeout(() => {
+      list.innerHTML = '<li class="paper-placeholder" aria-hidden="true"></li>'.repeat(3);
+    }, 220);
     try {
-      const response = await fetch("notes-index.json");
-      if (!response.ok) throw Error("目录加载失败");
-      const paths = await response.json();
-      if (!Array.isArray(paths)) throw Error("目录格式无效");
-      notes = paths
-        .filter((p) => typeof p === "string" && p.endsWith(".md"))
-        .map((path, index) => {
-          const parts = path.split("/").map((part) => {
-              try {
-                return decodeURIComponent(part);
-              } catch {
-                return part;
-              }
-            }),
-            filename = parts.pop();
-          return {
-            path,
-            url: new URL(path, location.href).href,
-            title: filename.replace(/\.md$/i, ""),
-            category:
-              parts.slice(parts.lastIndexOf("notes") + 1).join(" / ") ||
-              "开始这里",
-            index,
-          };
-        })
+      const rows = await fetchIndex("archive-index.json");
+      notes = rows.map((row, index) => ({ ...row, index, url: new URL(row.path, location.href).href }))
         .sort((a, b) => a.title.localeCompare(b.title, "zh-CN"));
-      const queue = [...notes];
-      await Promise.all(
-        Array.from({ length: Math.min(4, queue.length) }, async () => {
-          while (queue.length) {
-            const n = queue.shift();
-            try {
-              meta(n, await fetchNote(n));
-            } catch {}
-          }
-        }),
-      );
+      archiveReady = true;
       category.innerHTML = '<option value="">全部主题</option>';
       [...new Set(notes.map((n) => n.category))].sort().forEach((name) => {
         const o = document.createElement("option");
@@ -482,10 +519,12 @@
       render();
       route();
     } catch {
-      list.innerHTML =
-        '<div class="state">书架暂时没有打开。<br><button id="retry-index" type="button">重新加载目录</button></div>';
-      $("count").textContent = "连接未完成";
-      $("retry-index").onclick = load;
+      list.replaceChildren();
+      status.innerHTML = '书架暂时无法打开。 <button id="retry-index">重新加载书架</button>';
+      $("count").textContent = "";
+    } finally {
+      clearTimeout(placeholder);
+      list.setAttribute("aria-busy", "false");
     }
   }
   load();
