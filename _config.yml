@@ -1,5 +1,7 @@
 plugins:
   - jekyll-optional-front-matter
+whitelist:
+  - jekyll-optional-front-matter
 kramdown:
   input: Kramdown
 collections:
